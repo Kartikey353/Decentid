@@ -8,7 +8,8 @@ import {
     Input,
     Checkbox,
     Button,
-    Avatar
+    Avatar,
+    Alert
 } from "@material-tailwind/react";
 import profile from "../LoginPage/Assets/github-icon.svg"
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -17,6 +18,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import HashLoader from "react-spinners/HashLoader";
 export const Profile = () => {
     const [loading, setloading] = useState(false);
+    const [success, setsuccess] = useState(null);
+    const [msg, setmsg] = useState("failed");
     const [Fectch_FirstName, setFectch_FirstName] = useState();
     const [Fectch_Name, setFectch_Name] = useState();
     const [Fectch_Email, setFectch_Email] = useState();
@@ -66,12 +69,14 @@ export const Profile = () => {
 
 
     const updatedata = async () => {
+        setloading(true);
         const dataRef = doc(db, "userdata", id);
         setName(Name.trim());
         console.log(Name);
         const myArray = Name.split(" ");
         console.log(myArray);
         myArray.push(" ");
+        let check = true;
         await updateDoc(dataRef, {
             FName: myArray[0],
             LName: myArray[1],
@@ -79,16 +84,18 @@ export const Profile = () => {
             userWalletAddress: WalletAddress,
             userAddress: Address,
             userProffession: Proffession
+        }).catch((e) => {
+            check = false;
         });
-
-
+        setsuccess(check);
+        setloading(false);
     }
     useEffect(() => {
         setloading(true);
-        fetchdata(); 
+        fetchdata();
         setTimeout(() => {
             setloading(false);
-          }, 2000);
+        }, 2000);
     }, []);
     return (
         <>
@@ -108,6 +115,7 @@ export const Profile = () => {
                     :
                     <div className="md:w-[80vw] mx-auto">
                         <div className="">
+                            <Alert className={success ? `md:w-[30vw] mx-auto mt-10 bg-green-600  text-xl font-bold ${success === null ? "hidden" : ""}` : `md:w-[30vw] mx-auto mt-10 bg-red-600 text-xl font-bold ${success === null ? "hidden" : ""}`}>{success ? "Details Updated" : "Failed to saved data"}</Alert>
                             <Card className="w-96 mx-auto mt-32">
                                 <CardHeader
                                     variant="gradient"
