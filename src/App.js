@@ -6,14 +6,16 @@ import { useState, useEffect } from 'react';
 import Home from './Components/Pages/Home';
 import { Profile } from './Components/Pages/Profile';
 import { Dashboard } from './Components/Pages/Dashboard';
-import Upload from './Components/Pages/Upload';
+import Upload from './Components/Pages/Upload'; 
+import Documentsview from './Components/Pages/Documentsview';
+import Documentsverify from './Components/Pages/Documentsverify';
 function App() {
   const [loading, setloading] = useState(false);
   useEffect(() => {
     setloading(true);
     setTimeout(() => {
       setloading(false);
-    }, 8000);
+    }, 80);
   }, [])
 
   return (
@@ -39,7 +41,9 @@ function App() {
               <Route path="/" element={<Home />}></Route>
               <Route path="/profile/:id" element={<Profile />}></Route>
               <Route path="/dashboard/:id" element={<Dashboard />}></Route>
-              <Route path="/upload" element={<Upload />}></Route>
+              <Route path="/upload/:id" element={<Upload />}></Route>
+              <Route path="/documentsview/:id/:idx" element={<Documentsview />}></Route>
+              <Route path="/documentsverify/:id/:idx" element={<Documentsverify />}></Route>
             </Routes>
           </Router>
       }

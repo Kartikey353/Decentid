@@ -10,7 +10,8 @@ module.exports = function override(config) {
         "os": require.resolve("os-browserify"),
         "url": require.resolve("url"),
         "tty": require.resolve("tty-browserify"), 
-        "zlib":require.resolve("browserify-zlib")
+        "zlib":require.resolve("browserify-zlib"),
+        "process/browser":require.resolve('process/browser')
     })
     config.resolve.fallback = fallback;
     config.plugins = (config.plugins || []).concat([
@@ -18,6 +19,7 @@ module.exports = function override(config) {
             process: 'process/browser',
             Buffer: ['buffer', 'Buffer']
         })
-    ])
+    ]) 
+    // resolve: { fallback: { 'process/browser': require.resolve('process/browser'), } }
     return config;
 } 

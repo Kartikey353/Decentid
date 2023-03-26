@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Card,
     Input,
@@ -12,11 +12,25 @@ import { auth, db } from '../../firebase-config';
 import { signInWithPopup, GoogleAuthProvider, getAdditionalUserInfo } from 'firebase/auth';
 import { doc, setDoc, Timestamp, getDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
+import web3 from '../../web3';
 
 export const Login = () => {
-
+    const [checked, setchecked] = useState(false);
+    const [isWallet, setWallet] = useState(false); 
+    const [walletaddress,setwalletaddress] = useState();
     const provider = new GoogleAuthProvider();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (window.ethereum) {
+            setWallet(true); 
+            let accounts = web3.eth.getAccounts();
+            setwalletaddress(accounts[0]);
+        } else {
+            setWallet(false); 
+            setwalletaddress(0x0000000000000000);
+        }
+    },[]);
 
     const onClickgoogle = () => {
         signInWithPopup(auth, provider)
@@ -37,12 +51,12 @@ export const Login = () => {
                         UserId: resultt.email.substring(0, resultt.email.indexOf('@')),
                         dateExample: Timestamp.fromDate(new Date("December 10, 1815")),
                         userMobile: " ",
-                        userWalletAddress: "0x0000000000000000",
+                        userWalletAddress: toString(walletaddress),
                         userAddress: resultt.locale,
                         userProffession: " "
                     };
 
-                    const docRef = doc(db, "userdata",resultt.id);
+                    const docRef = doc(db, "userdata", resultt.id);
                     const docSnap = await getDoc(docRef);
                     if (!docSnap.exists()) {
                         await setDoc(doc(db, "userdata", resultt.id), docData);
@@ -83,8 +97,10 @@ export const Login = () => {
                     <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96 mx-auto">
                         <div className="mb-4 flex flex-col gap-6">
                             <Button
+                                disabled={checked === true ? false : true}
                                 onClick={() => {
-                                    onClickgoogle();
+                                    if (checked === true)
+                                        onClickgoogle();
                                 }}
                                 className="mt-6 bg-white text-black shadow-xl shadow-gray-400" fullWidth>
                                 <div className="flex space-x-6 text-center justify-center">
@@ -92,7 +108,13 @@ export const Login = () => {
                                     <img src={Google} className="w-8" alt="" />
                                 </div>
                             </Button>
-                            <Button className="mt-6 bg-white text-black shadow-xl shadow-gray-400" fullWidth>
+                            <Button
+                                disabled={checked === true ? false : true}
+                                onClick={() => {
+                                    if (checked === true)
+                                        onClickgoogle();
+                                }}
+                                className="mt-6 bg-white text-black shadow-xl shadow-gray-400" fullWidth>
                                 <div className="flex space-x-6 text-center justify-center">
                                     <span className="my-auto"> Join With Github </span>
                                     <img src={Github} className="w-8" alt="" />
@@ -100,6 +122,9 @@ export const Login = () => {
                             </Button>
                         </div>
                         <Checkbox
+                            onChange={(e) => {
+                                setchecked(e.target.checked);
+                            }}
                             label={
                                 (
                                     <Typography

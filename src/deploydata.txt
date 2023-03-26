@@ -1,0 +1,44 @@
+Compiling your contracts...
+===========================
+> Compiling .\contracts\Documetverification.sol
+> Artifacts written to C:\Users\asusl\OneDrive\Desktop\hackathon\build\contracts
+> Compiled successfully using:
+   - solc: 0.8.13+commit.abaa5c0e.Emscripten.clang
+
+
+Starting migrations...
+======================
+> Network name:    'matic'
+> Network id:      80001
+> Block gas limit: 20000000 (0x1312d00)
+
+
+1_deploy_contracts.js
+=====================
+
+   Deploying 'DocumentVerification'
+   --------------------------------
+   > transaction hash:    0xaf0ccaf59a323f57f1786b3466f27052e91b43664d0abc5386659cd48dd7620c
+   > Blocks: 4            Seconds: 9
+   > contract address:    0x7D7B59F662D4BC4F2ff32d66Fc08e0400e3644A0
+   > block number:        33594055
+   > block timestamp:     1679842053
+   > account:             0x8950da4D81F0715FFE32472518E0B97F5aEdF532
+   > balance:             0.194403667464183472
+   > gas used:            2238533 (0x222845)
+   > gas price:           2.500000016 gwei
+   > value sent:          0 ETH
+   > total cost:          0.005596332535816528 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 2 (block: 33594058)
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:     0.005596332535816528 ETH
+
+Summary
+=======
+> Total deployments:   1
+> Final cost:          0.005596332535816528 ETH

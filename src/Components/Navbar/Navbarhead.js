@@ -7,14 +7,44 @@ import {
     Button,
     IconButton,
 } from "@material-tailwind/react";
+import web3 from '../../web3';
 export const Navbarhead = () => {
+    const [haveMetamask, sethaveMetamask] = useState(true);
+    const [isConnected, setIsConnected] = useState(false);
+    const [accountAddress, setAccountAddress] = useState('');
     const [openNav, setOpenNav] = useState(false);
-
+    const [msg, setmsg] = useState("CONNECT WALLET");
+    const connectWallet = async () => {
+        const { ethereum } = window;
+        try {
+            if (!ethereum) {
+                sethaveMetamask(false);
+                setmsg("INSTALL WALLET");
+                return;
+            }
+            const accounts = await ethereum.request({
+                method: 'eth_requestAccounts',
+            });
+            setAccountAddress(accounts[0]);
+            setIsConnected(true);
+            setmsg("CONNECTED");
+        } catch (error) {
+            setIsConnected(false);
+        }
+    };
     useEffect(() => {
         window.addEventListener(
             "resize",
             () => window.innerWidth >= 960 && setOpenNav(false)
         );
+        const { ethereum } = window;
+        const checkMetamaskAvailability = async () => {
+            if (!ethereum) {
+                sethaveMetamask(false);
+            }
+            sethaveMetamask(true);
+        };
+        checkMetamaskAvailability();
     }, []);
 
 
@@ -28,16 +58,6 @@ export const Navbarhead = () => {
             >
                 <a href="/" className="flex items-center text-xl">
                     Home
-                </a>
-            </Typography>
-            <Typography
-                as="li"
-                variant="small"
-                color="blue-gray"
-                className="p-1 font-normal"
-            >
-                <a href="/upload" className="flex items-center text-xl">
-                    Upload
                 </a>
             </Typography>
             <Typography
@@ -65,8 +85,10 @@ export const Navbarhead = () => {
                         <span className='text-2xl font-bold'>DECENTID</span>
                     </Typography>
                     <div className="hidden lg:block">{navList}</div>
-                    <Button variant="gradient" size="sm" className="hidden lg:inline-block">
-                        <span>Connect Wallet</span>
+                    <Button
+                        onClick={connectWallet}
+                        variant="gradient" size="sm" className="hidden lg:inline-block">
+                        <span>{msg}</span>
                     </Button>
                     <IconButton
                         variant="text"
@@ -109,8 +131,10 @@ export const Navbarhead = () => {
                 <MobileNav open={openNav}>
                     <div className="container mx-auto">
                         {navList}
-                        <Button variant="gradient" size="sm" fullWidth className="mb-2">
-                            <span>Connect Wallet</span>
+                        <Button
+                            onClick={connectWallet}
+                            variant="gradient" size="sm" fullWidth className="mb-2">
+                            <span>{msg}</span>
                         </Button>
                     </div>
                 </MobileNav>
