@@ -52,8 +52,8 @@ const Upload = () => {
                 name: filename,
                 maxRetries: 3,
             })
-            alert('stored files with cid:', cid.toString());
-            setfilehash(cid.toString()); 
+            console.log('stored files with cid:', cid);
+            setfilehash(cid.toString());
             setloader(false);
             uploadfiles();
         }
